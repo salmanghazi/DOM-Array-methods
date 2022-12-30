@@ -5,12 +5,30 @@ const sortByMoney = document.getElementById('sort');
 const calculate = document.getElementById('calculate-wealth');
 const main = document.getElementById('main');
 
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  maximumFractionDigits: 2, // (causes 2500.99 to be printed as $2,501)
+});
+
 
 let users = [];
 
 function getName(name) {
   const { title, first, last } = name;
   return title + '. ' + first + ' ' + last; 
+}
+
+function updateDom(data = users) {
+  main.innerHTML = `<h2><strong>Person</strong> Wealth</h2>`;
+
+  data.forEach(user => {
+    const element = document.createElement('div');
+    element.classList.add('person');
+    element.innerHTML = `<strong>${user.name}</strong> ${formatter.format(user.money)}</h2>`;
+    main.appendChild(element);
+  });
 }
 
 async function addRandomUser() {
@@ -23,7 +41,30 @@ async function addRandomUser() {
   }
 
   users.push(user);
-  // main.innerHTML = getName(data.results[0].name);
+  updateDom();
+}
+
+function doubleUsersMoney() {
+  users = users.map(user => {
+    return { ...user, money: user.money * 2  };
+  });
+
+  updateDom();
+}
+
+function showMillionairesInDom() {
+  const millionaires = users.filter(user => {
+    return user.money > 1000000;
+  });
+  updateDom(millionaires);
+}
+
+function sortRich() {
+  users.sort((a, b) => b.money - a.money);
+  updateDom();
 }
 
 addUser.addEventListener('click', addRandomUser);
+doubleMoney.addEventListener('click', doubleUsersMoney);
+showMillionaires.addEventListener('click', showMillionairesInDom);
+sortByMoney.addEventListener('click', sortRich);
