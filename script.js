@@ -53,9 +53,7 @@ function doubleUsersMoney() {
 }
 
 function showMillionairesInDom() {
-  const millionaires = users.filter(user => {
-    return user.money > 1000000;
-  });
+  const millionaires = users.filter(user => user.money > 1000000;);
   updateDom(millionaires);
 }
 
