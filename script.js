@@ -2,7 +2,7 @@ const addUser = document.getElementById('add-user');
 const doubleMoney = document.getElementById('double');
 const showMillionaires = document.getElementById('show-millionaires');
 const sortByMoney = document.getElementById('sort');
-const calculate = document.getElementById('calculate-wealth');
+const calculateTotal = document.getElementById('calculate-wealth');
 const main = document.getElementById('main');
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -53,8 +53,8 @@ function doubleUsersMoney() {
 }
 
 function showMillionairesInDom() {
-  const millionaires = users.filter(user => user.money > 1000000;);
-  updateDom(millionaires);
+  users = users.filter(user => user.money > 1000000);
+  updateDom();
 }
 
 function sortRich() {
@@ -62,7 +62,18 @@ function sortRich() {
   updateDom();
 }
 
+function calculateTotalMoney() {
+  const wealth = users.reduce((acc, user) => (acc += user.money), 0);
+
+  const wealthEl = document.createElement('div');
+  wealthEl.innerHTML = `<h3>Total Wealth: <strong>${formatter.format(
+    wealth
+  )}</strong></h3>`;
+  main.appendChild(wealthEl);
+}
+
 addUser.addEventListener('click', addRandomUser);
 doubleMoney.addEventListener('click', doubleUsersMoney);
 showMillionaires.addEventListener('click', showMillionairesInDom);
 sortByMoney.addEventListener('click', sortRich);
+calculateTotal.addEventListener('click', calculateTotalMoney);
